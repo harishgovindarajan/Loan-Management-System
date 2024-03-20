@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lender Signup</title>
+    <style>
+        /* Your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('../loan/lender.jpg');
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 90%;
+            margin: auto;
+        }
+
+        h1 {
+            color: #2ecc71;
+            margin-bottom: 20px;
+        }
+
+        .signup-form {
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: #2ecc71;
+        }
+
+        .signup-button {
+            background-color: #2ecc71;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            text-transform: uppercase;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .signup-button:hover {
+            background-color: #27ae60;
+        }
+
+        #responseMessage {
+            margin-top: 15px;
+            color: #e74c3c;
+            font-size: 14px;
+        }
+
+        .invalid-field {
+            border: 2px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Lender Signup</h1>
+        <div class="signup-form">
+            <form id="signupForm" method="post" action="lendersignup_process.php">
+                <input type="text" id="name" name="name" placeholder="Name" required>
+                <input type="email" id="email" name="email" placeholder="Email" required>
+                <input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <button type="button" class="signup-button" id="signupButton">Sign Up</button>
+            </form>
+            <p id="responseMessage"></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('signupButton').addEventListener('click', function () {
+            submitForm();
+        });
+
+        function submitForm() {
+            var nameInput = document.getElementById('name');
+            var emailInput = document.getElementById('email');
+            var phoneInput = document.getElementById('phone');
+            var passwordInput = document.getElementById('password');
+
+            var name = nameInput.value;
+            var email = emailInput.value;
+            var phone = phoneInput.value;
+            var password = passwordInput.value;
+
+            // Reset previous error messages
+            document.getElementById('responseMessage').innerText = '';
+            nameInput.classList.remove('invalid-field');
+            emailInput.classList.remove('invalid-field');
+            phoneInput.classList.remove('invalid-field');
+            passwordInput.classList.remove('invalid-field');
+
+            // Check if all fields are filled
+            if (!name || !email || !phone || !password) {
+                document.getElementById('responseMessage').innerText = "Please fill in all fields.";
+                if (!name) nameInput.classList.add('invalid-field');
+                if (!email) emailInput.classList.add('invalid-field');
+                if (!phone) phoneInput.classList.add('invalid-field');
+                if (!password) passwordInput.classList.add('invalid-field');
+                return;
+            }
+
+            // Email validation using regular expression
+            var emailRegex = /^[a-zA-Z0-9][^\s@]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('responseMessage').innerText = "Please enter a valid email address.";
+                emailInput.classList.add('invalid-field');
+                return;
+            }
+
+            // Password validation
+            var passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$/;
+            if (!passwordRegex.test(password)) {
+                document.getElementById('responseMessage').innerText = "Password must be at least 8 characters long, contain at least one uppercase letter, and one special character.";
+                passwordInput.classList.add('invalid-field');
+                return;
+            }
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'lendersignup_process.php', true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    document.getElementById('responseMessage').innerText = response.message;
+                    if (response.status === 'success') {
+                        // Clear form fields on successful signup
+                        nameInput.value = '';
+                        emailInput.value = '';
+                        phoneInput.value = '';
+                        passwordInput.value = '';
+                    }
+                }
+            };
+            var params = 'name=' + encodeURIComponent(name) +
+                '&email=' + encodeURIComponent(email) +
+                '&phone=' + encodeURIComponent(phone) +
+                '&password=' + encodeURIComponent(password);
+
+            xhr.send(params);
+        }
+    </script>
+</body>
+
+</html>

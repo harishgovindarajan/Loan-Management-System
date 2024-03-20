@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .top-bar {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1; /* Ensure the top bar is above the blurred background */
+        }
+
+        .website-name {
+            color: rgb(255, 255, 255); /* Change text color */
+            font-size: 2em; /* Increase font size */
+            margin: 0 20px;
+            z-index: 1; /* Ensure the website name is above the blurred background */
+        }
+
+        .top-menu {
+            display: flex;
+            gap: 20px;
+        }
+
+        .top-menu a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1.2em;
+        }
+
+        .top-menu a:hover {
+            color: #ffc107;
+        }
+
+        .welcome-content {
+            background-image: url('../loan/bg1.png'); /* Add your background image URL here */
+            background-color: rgba(135, 206, 250, 0.8); /* Semi-transparent background color */
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            position: relative;
+            z-index: 0; /* Ensure the blurred background is behind the content */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .welcome-button {
+            font-size: 2em;
+            padding: 20px 40px;
+            border: 2px solid #645c99; /* Add border */
+            border-radius: 50px; /* Make button round */
+            background-color: transparent; /* Transparent background */
+            color: rgb(0, 0, 0); /* Text color */
+            cursor: pointer;
+            position: relative; /* Needed for hover effect */
+            overflow: hidden; /* Hide overflow */
+            z-index: 1; /* Ensure the button is above the blurred background */
+            transition: all 0.3s ease; /* Add transition effect */
+        }
+
+        .welcome-button::before {
+            content: ''; /* Add pseudo-element for the hover effect */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background-color: #135ea5;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            z-index: -1; /* Ensure the pseudo-element is behind the button */
+            transform: translate(-50%, -50%);
+        }
+
+        .welcome-button:hover::before {
+            width: 0;
+            height: 0;
+        }
+
+        .welcome-button span {
+            position: relative;
+            z-index: 2; /* Ensure the text is above the blurred background */
+        }
+
+        .welcome-button:hover {
+            color: #333; /* Change text color on hover */
+        }
+
+        .background-blur {
+            filter: blur(10px); /* Add blur effect only to the background */
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -2; /* Ensure the blurred background is at the bottom */
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="website-name">Access Loan</div> <!-- Website name -->
+        <div class="top-menu">
+            <a href="adminlogin.html">Admin</a>
+            <a href="#">Q / A</a>
+            <a href="#">Loan</a>
+            <a href="#">About Us</a>
+            <a href="#">Contact Us</a>
+</a>
+        </div>
+    </div>
+
+    <div class="welcome-content">
+        <div class="background-blur"></div> <!-- Div for background blur -->
+        <button class="welcome-button" id="welcomeButton"><span>Welcome! 🏦📈</span></button> <!-- Changed emojis to be related to loan -->
+    </div>
+
+    <script>
+        // Add event listener to the welcome button
+        document.getElementById("welcomeButton").addEventListener("click", function() {
+            // Add transition effect before navigating
+            document.querySelector(".welcome-content").style.opacity = 0;
+            setTimeout(function() {
+                // Navigate to index.html
+                window.location.href = "home.html";
+            }, 300); // Match the transition duration (0.3s)
+        });
+    </script>
+</body>
+</html>
